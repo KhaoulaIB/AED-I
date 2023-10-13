@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"<Unnamed>","l":"Exercici5.Adreces"},{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"<Unnamed>","l":"Exercici5.Area"},{"p":"<Unnamed>","l":"Estudiant"},{"p":"<Unnamed>","l":"Exercici5"},{"p":"<Unnamed>","l":"Exercici5.Noms"},{"p":"<Unnamed>","l":"Persona"},{"p":"<Unnamed>","l":"Professor"}];updateSearchResults();

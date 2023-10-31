@@ -189,6 +189,7 @@ public class LlistaReferencia<E extends Comparable<E>> implements Lista<E> {
                     current.anterior.siguiente = current.siguiente;
                     current.siguiente.anterior = current.anterior;
                 }
+                size--;
                 return; // Elemento encontrado y eliminado
             }
             current = current.siguiente;

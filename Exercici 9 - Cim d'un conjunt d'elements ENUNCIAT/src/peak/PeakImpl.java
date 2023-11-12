@@ -12,9 +12,9 @@ public class PeakImpl implements Peak {
 
     /**  Los elementos de a estan ordenados de forma creciente hasta el indice de la cima (id) y luego se decrecen.
         No hay elementos repetidos.Y existe una unica cima en el arreglo a.
-     *@pre ∀i 1<=i<=id     a[i].compareTo(a[i-1])>=0 Λ ∀i id<i<a.length a[i].compareTo[a[i-1]]<=0 Λ id>0 Λ id<a.length-1.
+     *@pre ∀i 1<=i<=id     a[i].compareTo(a[i-1])>0 Λ ∀i id<i<a.length a[i].compareTo[a[i-1]]<0 Λ id>0 Λ id<a.length-1.
      *
-     *@post 0<id<a.length-1   --> el indice de la cima no esta en los extremos y ademas es diferente de -1.
+     *@post 0<id<a.length-1  Λ a[id]=cima --> el indice de la cima no esta en los extremos y ademas es diferente de -1.
      * Busca y devuelve un punto que representa la cima en un arreglo de enteros.
      *
      * @param a Un arreglo de enteros en el que se buscará la cima.

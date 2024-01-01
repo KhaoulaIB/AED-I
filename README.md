@@ -1,2 +1,2 @@
 # AED-I
-Talleres y prácticas de la aasignatura Algoritmia y estructura de datos I
+Talleres y prácticas de la asignatura Algoritmia y estructura de datos I

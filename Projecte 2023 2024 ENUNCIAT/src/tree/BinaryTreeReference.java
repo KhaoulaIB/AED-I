@@ -1,8 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package tree;
+package practica_kib_arv;
+
+import org.w3c.dom.Node;
+
+import java.util.Stack;
+
+import static java.lang.Math.max;
+
 /**
  * Clase que contiene la implementación del árbol binario utilizando las
  * referencias.
@@ -42,6 +45,29 @@ public class BinaryTreeReference<E extends Comparable<E>> implements BinaryTree<
             right = null;
         }
 
+        public E getElement() {
+            return element;
+        }
+
+        public void setElement(E element) {
+            this.element = element;
+        }
+
+        public NodeArbre getLeft() {
+            return left;
+        }
+
+        public void setLeft(NodeArbre left) {
+            this.left = left;
+        }
+
+        public NodeArbre getRight() {
+            return right;
+        }
+
+        public void setRight(NodeArbre right) {
+            this.right = right;
+        }
     }
 
     /**
@@ -109,6 +135,34 @@ public class BinaryTreeReference<E extends Comparable<E>> implements BinaryTree<
         return current;
     }
 
+
+    //insert iterative:
+    void insertIterative(E e){
+        NodeArbre node = new NodeArbre(e);
+        if (root == null) {//es la raíz
+            root = node;
+        }
+        //buscanos donde insertarlo
+        NodeArbre aux = root;
+
+        while (aux != null) {
+            if (e.compareTo(aux.element) < 0) {//avanzar en el subarbol izquierdo
+                if (aux.left == null) {
+                    aux.left = node;
+                    return;
+                }
+                aux = aux.left;
+            } else if (e.compareTo(aux.element) > 0) {
+                if (aux.right == null) {//avanzar en el subarbol derecho
+                    aux.right= node;
+                    return;
+                }
+                aux = aux.right;
+            } else {//ya existe
+                return;
+            }
+        }
+    }
     /**
      * Comprueba si un elemento está presente en el árbol. Llama al método
      * containsRecursive para introducirle el parámetro NodeArbre. El orden de
@@ -157,6 +211,59 @@ public class BinaryTreeReference<E extends Comparable<E>> implements BinaryTree<
         } else {
             return containsRecursive(element, current.right);
         }
+    }
+
+    public boolean containsIterative (E e){
+
+        NodeArbre current = root;
+        while (current!=null){
+            if (current.element.compareTo(e)>0){
+                current = current.right;
+
+            }else if (current.element.compareTo(e)<0){
+                current= current.left;
+            }else{
+                return true;
+            }
+        }
+        return false;
+
+
+    }
+
+    public int LongestBranchIterative(){
+        if (root == null) {
+            return 0;
+        }
+
+        int maxLength = 0;
+
+        Stack<NodeArbre> stack = new Stack<>();
+        Stack<Integer> depths = new Stack<>();
+
+        stack.push(root);
+        depths.push(0);
+
+        while (!stack.isEmpty()) {
+            NodeArbre current = stack.pop();
+            int currentDepth = depths.pop();
+
+            if (current.left == null && current.right == null) {
+                maxLength = Math.max(maxLength, currentDepth);
+            }
+
+            if (current.right != null) {
+                stack.push(current.right);
+                depths.push(currentDepth + 1);
+            }
+
+            if (current.left != null) {
+                stack.push(current.left);
+                depths.push(currentDepth + 1);
+            }
+        }
+
+        return maxLength;
     }
 
     /**
@@ -208,6 +315,35 @@ public class BinaryTreeReference<E extends Comparable<E>> implements BinaryTree<
         return getMotherRecursive(element, current.right);
     }
 
+    public E getMotherIterative(E e) {
+        NodeArbre current = root;
+        NodeArbre parent = null;
+
+        while (current != null) {
+            int comparisionResult = e.compareTo(current.element);
+
+            if (comparisionResult < 0) {
+                parent = current;
+                current = current.left;
+            } else if (comparisionResult > 0) {
+                parent = current;
+                current = current.right;
+            } else {
+                // Hemos encontrado el elemento
+                return (parent != null) ? parent.element : null;
+            }
+        }
+
+        return null;
+    }
+
+
+
+
+
+
+
+
     /**
      * Calcula la longitud de la rama más larga en el árbol binario. El orden de
      * complejidad es O(n), porque el orden de complejidad del método recursivo
@@ -241,7 +377,7 @@ public class BinaryTreeReference<E extends Comparable<E>> implements BinaryTree<
         int leftDepth = recursiveLongestBranch(current.left);
         int rightDepth = recursiveLongestBranch(current.right);
         //Se suma 1 para contar el nodo actual
-        return Math.max(leftDepth, rightDepth) + 1;
+        return max(leftDepth, rightDepth) + 1;
     }
 
     /**
@@ -254,6 +390,42 @@ public class BinaryTreeReference<E extends Comparable<E>> implements BinaryTree<
     @Override
     public E getRoot() {
         return root.element;
+    }
+
+
+    void printPreorder(NodeArbre node){
+        if (node == null)
+            return;
+        // First print data of node
+        System.out.print(node.element + " ");
+        // Then recur on left subtree
+        printPreorder(node.left);
+        // Now recur on right subtree
+        printPreorder(node.right);
+    }
+
+    void printPostorder(NodeArbre node)
+    {
+        if (node == null)
+            return;
+        // First recur on left subtree
+        printPostorder(node.left);
+        // Then recur on right subtree
+        printPostorder(node.right);
+        // Now deal with the node
+        System.out.print(node.element + ",");
+    }
+
+    void printInorder(NodeArbre node)
+    {
+        if (node == null)
+            return;
+        // First recur on left child
+        printInorder(node.left);
+        // Then print the data of node
+        System.out.print(node.element + " ");
+        // Now recur on right child
+        printInorder(node.right);
     }
 
 }

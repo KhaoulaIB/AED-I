@@ -7,57 +7,135 @@ import java.util.List;
 /**
  * @author Titrit
  */
-public class Main {
+public class Backtracking {
 
 
     static String direction = "DLRU";
     private static int min;
     static Point[] posicions = {new Point(1, 0), new Point(0, -1), new Point(0, 1), new Point(-1, 0)};
 
+
+    static Point[] poscaballo =  {new Point(-2, 1), new Point(-2, -1), new Point(-1, 2), new Point(-1, -2), new Point(1,2),new Point(1,-2),new Point(2,1),new Point(2,-1)};
     private static boolean isValid(Point point, int n, int[][] visited) {
         return point.x >= 0 && point.y >= 0 && point.x < n && point.y < n && visited[point.x][point.y] == 0;
     }
 
-    private boolean kDivideSum(int[] array, int k) {
+
+    private static boolean isValidCaball(Point point, int n, int[][] visited) {
+        return point.x >= 0 && point.y >= 0 && point.x < n && point.y < n && visited[point.x][point.y] == -1;
+    }
+
+    public static boolean Allvisited(int [][] visited){
+        for (int i = 0; i<8; i++){
+            for (int j = 0; j<8; j++){
+                if (visited[i][j]==-1) {
+                return false;}
+            }
+        }
+        return true;
+    }
+
+    static void printSol(int sol[][])
+    {
+        for (int x = 0; x < sol.length; x++) {
+            for (int y = 0; y < sol.length; y++)
+                System.out.print(sol[x][y] + " ");
+            System.out.println();
+        }
+    }
+    private static boolean solutionFound = false;
+
+    private static boolean caballMoviment(Point current,  int[][] matriz, int[][] visited, int moveNumber) {
+
+       if (Allvisited(visited) ) {
+           System.out.println("the problem has a solution");
+           printSol(visited);
+       //    solutionFound = true;  // Marcamos que ya se encontró una solución
+
+           return true;
+       }
+           int i = 0;
+           Point nextPoint = new Point(0, 0);
+           while (i < poscaballo.length) {
+               int nextX = current.x + poscaballo[i].x;
+               int nextY = current.y + poscaballo[i].y;
+               nextPoint.setLocation(nextX, nextY);
+
+               if (isValidCaball(nextPoint, matriz.length, visited)) {
+                   visited[nextPoint.x][nextPoint.y] = moveNumber;
+                  if (caballMoviment(nextPoint, matriz, visited, moveNumber + 1)) {
+                      return true;
+                  }
+                   visited[nextPoint.x][nextPoint.y] = -1;
+
+               }
+
+               i++;
+           }
+           return false;
+
+
+    }
+
+    private static boolean kDivideSum(int[] array, int k) {
         int sum = 0;
         for (int j : array) {
             sum += j;
         }
-        int result = sum / k;
-        double r = (double) sum / k;
-        return r - (double) result == 0;
-
+        return sum % k == 0;
     }
 
-    /*
-    Primero resolvemos parar k=2
-     */
-    public static boolean Partition(int[] array, int N, int t[], int k) {
-        //una possiblitat --> int [] t se li assignará valors 0--k i per la suma s'anira sumant perls k conjunts
+    public static boolean Partition(int[] array, int N, int[] t, int k) {
         int n = array.length;
-      /* ++ if (k>n || !kDivideSum(array,k)){//no se puede dividir un conjunto en m>array.length elementos. tampoco si
-            //k no divide la suma total del conjunto de elementos
+        if (N > n || !kDivideSum(array, N)) {
             return false;
-
-        }else if (k ==1){//sol = set
+        } else if (k == 1) {
             return true;
-        }else{//we use backtracking*/
-        t[k] = -1;
-        while (t[k] < 1) {
-            t[k]++; //visitar nodo actual
-            if (Sum(t, k, array) == 0 && k == n - 1) {//sumas iguales
-                //imprimir la solucion
-                PrintSolucion(t, array);
-                return true;
-            } else if (Sum(t, k, array)<0 && k < n - 1) {//possible solucio
-               return Partition(array, N, t, k + 1);
+        } else {
+            t[k] = -1;
+            while (t[k] < N - 1) {
+                t[k]++;
+                if (Sum(t, k, array, N) == 0 && k == n - 1) {
+                    return true;
+                } else if (Sum(t, k, array, N) > 0 && k < n - 1) {
+                    if (Partition(array, N, t, k + 1)) {
+                        return true;
+                    }
+                }
             }
-
         }
-        t[k]=-1;
-        return false; //no solution found
-
+        t[k] = -1;
+        return false;
     }
+
+    private static int Sum(int[] t, int k, int[] array, int N) {
+        int[] sumas = new int[N];
+        int total = 0;
+        for (int i = 0; i <= k; i++) {
+            sumas[t[i]] += array[i];
+        }
+        for (int i = 0; i < array.length; i++) {
+            total += array[i];
+        }
+        int limit = total / N;
+
+        int iguales = 0;
+        for (int i : sumas) {
+            if (i > limit) {
+                return -1;
+            } else if (i == limit) {
+                iguales++;
+            }
+        }
+
+        if (iguales == sumas.length) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+
 
     private static void PrintSolucion(int [] t, int [] array){
         int length = 0;
@@ -86,19 +164,6 @@ public class Main {
 
 
 
-    }
-
-    private static int Sum(int [] t, int k, int []array){
-        //t = {1..k};
-        int sum1 =0,sum2=0;
-        for (int i = 0; i<=k; i++){
-            if (t[i]==1){
-                sum1+=array[i];//elemento incluido en la solucion
-            }else{
-                sum2+=array[i];//no
-            }
-        }
-        return sum1-sum2;
     }
 
 
@@ -151,7 +216,7 @@ public class Main {
                     return;
                 }
             }
-            if (i < 4) {
+            if (i < posicions.length) {
                 visited[start.x][start.y] = 1;
                 nextX = start.x + posicions[i].x;
                 nextY = start.y + posicions[i].y;
@@ -203,12 +268,67 @@ public class Main {
 
         //Partition problem
 
+        /*
         int[] array = {1, 2, 3, 6};
         int[] t = new int[array.length];
         Arrays.fill(t, -1);
-        System.out.println(Partition(array,2,t,0));
+        System.out.println(Partition(array,3,t,0));*/
+       // System.out.println(Partition(array,2,t,0));
+
+        //problema del recorregut del caball
+
+        int [][] tablero= new int[8][8];
+        int [][] t = new int [8][8];
+        //marcar todas como no visitadas
+       for (int i =0; i<8; i++){
+           for (int j = 0; j<8; j++){
+               t[i][j]=-1;
+           }
+       }
+       //punto de partida
+        t[0][0]=0;
+
+
+        System.out.println(caballMoviment(new Point(0,0),tablero, t,1));
+        System.out.println( càlcul(10,2));
+
+        int v1[] = {2,3,4,7,9,12};
+        int v2[]={2,3,4,7,9,12};
+        System.out.println(EqualVectors(v1,v2));
+    }
+
+
+    public static int càlcul(int a, int acumulativo){
+        if(a<=1){
+            return acumulativo;
+        }else{
+            a=a/3;
+            return càlcul(a, 3*acumulativo);
+        }
+    }
+
+    /*
+    *Ddos dos vectores ordenados de forma creciente determinar si continene los mismos
+    valors.Ejercicio 3 del examen de febrer 2016-2017
+     */
+
+    public static boolean EqualVectors(int [] v1, int[] v2){
+        int n = v1.length-1;
+        int mig = 0;
+         for (int i =0; i<=n; i++){
+             if (v1[i]==v2[i] && v1[n-i]==v2[n-i]){
+                 //comprobar que el valor medio tambien lo es
+                 mig = (n+i)/2;
+                 if (v1[mig]!=v2[mig]){
+                     return false;
+                 }
+             }
+         }
+         return true;
 
     }
+
+
 }
 
    /* public boolean Exercici1(boolean[] V, String E) {

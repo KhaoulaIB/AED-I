@@ -89,7 +89,7 @@ public class Backtracking {
         int n = array.length;
         if (N > n || !kDivideSum(array, N)) {
             return false;
-        } else if (k == 1) {
+        } else if (N == 1) {
             return true;
         } else {
             t[k] = -1;
@@ -98,9 +98,8 @@ public class Backtracking {
                 if (Sum(t, k, array, N) == 0 && k == n - 1) {
                     return true;
                 } else if (Sum(t, k, array, N) > 0 && k < n - 1) {
-                    if (Partition(array, N, t, k + 1)) {
-                        return true;
-                    }
+                    return Partition(array, N, t, k + 1);
+                      
                 }
             }
         }

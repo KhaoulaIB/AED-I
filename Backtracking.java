@@ -50,8 +50,6 @@ public class Backtracking {
        if (Allvisited(visited) ) {
            System.out.println("the problem has a solution");
            printSol(visited);
-       //    solutionFound = true;  // Marcamos que ya se encontró una solución
-
            return true;
        }
            int i = 0;
@@ -96,10 +94,10 @@ public class Backtracking {
             while (t[k] < N - 1) {
                 t[k]++;
                 if (Sum(t, k, array, N) == 0 && k == n - 1) {
+                    printSubconjuntos(array,t);
                     return true;
                 } else if (Sum(t, k, array, N) > 0 && k < n - 1) {
-                    return Partition(array, N, t, k + 1);
-                      
+                   return Partition(array,N,t,k+1);
                 }
             }
         }
@@ -134,7 +132,24 @@ public class Backtracking {
         }
     }
 
+    public static void printSubconjuntos(int[] a, int[] t) {
+        Map<Integer, ArrayList<Integer>> subconjuntos = new HashMap<>();
 
+        // Agrupar elementos por subconjunto
+        for (int i = 0; i < a.length; i++) {
+            int subconjunto = t[i];
+            subconjuntos.putIfAbsent(subconjunto, new ArrayList<>());
+            subconjuntos.get(subconjunto).add(a[i]);
+        }
+
+        // Imprimir subconjuntos
+        for (Map.Entry<Integer, ArrayList<Integer>> entry : subconjuntos.entrySet()) {
+            int numSubconjunto = entry.getKey();
+            ArrayList<Integer> elementos = entry.getValue();
+
+            System.out.printf("Subconjunto %d = {%s}%n", numSubconjunto, elementos.toString());
+        }
+    }
 
     private static void PrintSolucion(int [] t, int [] array){
         int length = 0;
@@ -267,12 +282,14 @@ public class Backtracking {
 
         //Partition problem
 
-        /*
+
         int[] array = {1, 2, 3, 6};
         int[] t = new int[array.length];
         Arrays.fill(t, -1);
-        System.out.println(Partition(array,3,t,0));*/
-       // System.out.println(Partition(array,2,t,0));
+        System.out.println(Partition(array,3,t,0));
+        Arrays.fill(t, -1);
+
+         System.out.println(Partition(array,2,t,0));
 
         //problema del recorregut del caball
 
@@ -294,6 +311,10 @@ public class Backtracking {
         int v1[] = {2,3,4,7,9,12};
         int v2[]={2,3,4,7,9,12};
         System.out.println(EqualVectors(v1,v2));
+
+        System.out.println(div(10,3));
+        System.out.println(div2(10,3,0));
+        System.out.println(div2Iteratiu(10,3));
     }
 
 
@@ -305,7 +326,32 @@ public class Backtracking {
             return càlcul(a, 3*acumulativo);
         }
     }
+public static int div(int a, int b){
+        if (a<b){
+            return 0;
+        }else{
+            return 1+div(a-b,b);
+        }
+}
 
+public static int div2(int a, int b, int acumultaiu){
+    if (a<b){
+        return acumultaiu;
+    }else{
+        return div2(a-b,b,acumultaiu+1);
+    }
+}
+
+    public static int div2Iteratiu(int a, int b){
+        int tmp = 0;
+       while (a>=b){
+           a-=b;
+           tmp++;
+
+       }
+       return tmp;
+
+    }
     /*
     *Ddos dos vectores ordenados de forma creciente determinar si continene los mismos
     valors.Ejercicio 3 del examen de febrer 2016-2017

@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.List;
 
 /**
- * @author Titrit
+ * @author KIB
  */
 public class Backtracking {
 
@@ -326,6 +326,8 @@ public class Backtracking {
             return càlcul(a, 3*acumulativo);
         }
     }
+
+    
 public static int div(int a, int b){
         if (a<b){
             return 0;
@@ -333,7 +335,9 @@ public static int div(int a, int b){
             return 1+div(a-b,b);
         }
 }
-
+/*
+*Transformación de metodo no final a final. 
+*/
 public static int div2(int a, int b, int acumultaiu){
     if (a<b){
         return acumultaiu;
@@ -342,6 +346,9 @@ public static int div2(int a, int b, int acumultaiu){
     }
 }
 
+    /*
+    *Metodo de division de forma iterativa.
+    */
     public static int div2Iteratiu(int a, int b){
         int tmp = 0;
        while (a>=b){
@@ -376,43 +383,5 @@ public static int div2(int a, int b, int acumultaiu){
 
 }
 
-   /* public boolean Exercici1(boolean[] V, String E) {
-        int t[] = new int[V.length];
-        Arrays.fill(t, -1);
-        int nivel = 0;
-        boolean solucion[] = new boolean[V.length];
-        return auxiliaryEX1(V, E, nivel, t, solucion);
-    }*/
 
-  /*  public boolean auxiliaryEX1(boolean[] V, String E, int k, int[] t, boolean[] solucion) {
-        t[k] = -1; //nodo actual
-        while (t[k] < 1) {//
-            if (canBeTrue(V, E, k)) {
-                System.arraycopy(solucion, 0, t, 0, t.length);
-
-            }
-
-        }
-
-    }*/
-
-
-  /*  private boolean canBeTrue(boolean[] V, String E, int k) {
-        String parts[] = E.split(" ");
-        StringBuilder condicion= new StringBuilder();
-
-        for (int i = 0 ; i<parts.length; i++){
-            if (parts[i].equals("and")){
-                condicion.append("&&");
-            }else if (parts[i].equals("or")){
-                condicion.append("||");
-            }else{
-
-                    condicion.append(parts[i]);
-
-            }
-        }
-        //pasamos la condicion en formato string a formato boolean
-
-
-    }*/
+  
